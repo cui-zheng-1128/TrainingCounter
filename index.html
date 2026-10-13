@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+	<meta name="theme-color" content="#f3f9f7">
+	<!-- Apple 独立模式相关配置 -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-title" content="训练倒计时">
+	<title>训练倒计时</title>
+	<link rel="manifest" href="manifest.webmanifest">
+	<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+	<link rel="icon" href="assets/icons/icon-192.png" sizes="192x192">
+	<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+	<header class="app-header">
+		<h1>训练倒计时</h1>
+	</header>
+
+	<!-- 静音拨片提示条：首次显示，可关闭 -->
+	<div id="hint-bar" class="hint-bar" hidden>
+		<span class="hint-text">请确保 iPhone 侧面静音开关处于关闭状态，否则无法听到语音。</span>
+		<button id="btn-hint-close" type="button" class="hint-close" aria-label="关闭提示">×</button>
+	</div>
+
+	<main class="container">
+		<!-- 设置卡片 -->
+		<section id="card-settings" class="card" aria-label="设置">
+			<h2 class="card-title">设置</h2>
+			<div class="settings-grid">
+				<label class="field">
+					<span class="field-label">训练时长（秒）</span>
+					<input id="input-duration" type="number" inputmode="numeric" min="20" step="1" value="30">
+				</label>
+				<label class="field">
+					<span class="field-label">休息时长（秒）</span>
+					<input id="input-rest" type="number" inputmode="numeric" min="10" step="1" value="15">
+				</label>
+			</div>
+			<p id="settings-error" class="settings-error" hidden></p>
+			<p class="settings-note">训练最短 20 秒，休息最短 10 秒</p>
+		</section>
+
+		<!-- 列表卡片 -->
+		<section class="card" aria-label="列表">
+			<h2 class="card-title">列表</h2>
+			<div id="segment-list" class="segment-list"></div>
+			<p id="list-empty" class="list-empty" hidden>暂无训练，点击下方按钮添加。</p>
+			<div class="plan-tools">
+				<button id="btn-export" type="button" class="btn">导出计划</button>
+				<button id="btn-import" type="button" class="btn">导入计划</button>
+				<input id="import-file" type="file" accept=".json,application/json" hidden>
+			</div>
+			<button id="btn-add-segment" type="button" class="btn btn-block">＋ 添加训练</button>
+			<p id="plan-summary" class="plan-summary">总时长：请先添加训练训练</p>
+		</section>
+
+		<!-- 运行面板 -->
+		<section class="card" aria-label="运行面板">
+			<h2 class="card-title">运行</h2>
+			<div class="run-head">
+				<span id="phase-label" class="phase-label">未开始</span>
+				<span id="run-segment-name" class="run-segment-name"></span>
+			</div>
+			<div id="run-time" class="run-time">00:00</div>
+			<div id="run-progress" class="run-progress"></div>
+			<div class="progress" aria-hidden="true">
+				<div id="progress-fill" class="progress-fill"></div>
+			</div>
+			<div class="controls">
+				<button id="btn-start" type="button" class="btn btn-primary">开始</button>
+				<button id="btn-pause" type="button" class="btn" hidden>暂停</button>
+				<button id="btn-resume" type="button" class="btn" hidden>继续</button>
+				<button id="btn-skip" type="button" class="btn" hidden>跳过</button>
+				<button id="btn-reset" type="button" class="btn" hidden>重置</button>
+			</div>
+			<div id="done-panel" class="done-panel" hidden>
+				<p class="done-title">训练完成</p>
+				<button id="btn-done-reset" type="button" class="btn btn-primary">重置</button>
+			</div>
+		</section>
+	</main>
+
+	<footer class="app-footer">
+	  <p>© 2026 cui-zheng-1128 · 训练倒计时 <span id="app-version">v1.0.0</span></p>
+	</footer>
+
+	<div id="toast" class="toast" hidden></div>
+
+	<!-- 语音加载遮罩：点击开始后等待全部语音就绪再启动 -->
+	<div id="loading-overlay" class="loading-overlay" hidden>
+	  <div class="loading-box">
+	    <div class="spinner" aria-hidden="true"></div>
+	    <p class="loading-text">正在加载语音…</p>
+	  </div>
+	</div>
+
+	<!-- 先加载 SortableJS，再加载应用入口 -->
+	<script src="js/vendor/sortable.min.js" defer></script>
+	<script type="module" src="js/app.js"></script>
+</body>
+
+</html>
